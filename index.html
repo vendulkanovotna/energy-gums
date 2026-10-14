@@ -1,1128 +1,719 @@
 <!DOCTYPE html>
-<html lang="cs" class="scroll-smooth dark">
+<html lang="cs" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Gums – Rychlá energie v každém kousnutí</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        limeglow: '#a3e635',
-                        neoncyan: '#06b6d4',
-                        electricdark: '#030712'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Merriweather', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts & Font Awesome Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Gums | Rychlá energie & mentální fokus</title>
 
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              lime: '#84cc16',
+              emerald: '#10b981',
+              cyan: '#06b6d4',
+              dark: '#090d16',
+              darker: '#05070b'
+            }
+          }
         }
-        .prose-custom {
-            font-family: 'Merriweather', serif;
-            line-height: 1.85;
-        }
-        .glow-effect {
-            box-shadow: 0 0 35px -5px rgba(163, 230, 53, 0.35);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.6);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a3e635;
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .neon-text-lime { text-shadow: 0 0 25px rgba(132, 204, 22, 0.45); }
+    .neon-border { box-shadow: 0 0 20px -3px rgba(132, 204, 22, 0.25); }
+  </style>
+
+  <!-- ANALYTIKA S PODMÍNKOU SOUHLASU (GDPR COMPLIANT) -->
+  <script>
+    const GA_MEASUREMENT_ID = 'G-783LRPVM8Z';
+    const CLARITY_PROJECT_ID = 'yxr4tamukt';
+
+    function runAnalytics() {
+      if (window._analyticsLoaded) return;
+      window._analyticsLoaded = true;
+
+      // 1. Google Analytics 4 (GA4)
+      if (GA_MEASUREMENT_ID) {
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+        document.head.appendChild(gaScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', GA_MEASUREMENT_ID);
+        console.log('[Analytics] Google Analytics 4 aktivováno.');
+      }
+
+      // 2. Microsoft Clarity
+      if (CLARITY_PROJECT_ID) {
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", CLARITY_PROJECT_ID);
+        console.log('[Analytics] Microsoft Clarity aktivováno.');
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-lime-400 selection:text-slate-950">
+<body class="bg-slate-50 text-slate-900 dark:bg-brand-dark dark:text-slate-100 min-h-screen transition-colors duration-300">
 
-    <!-- Toast Notifikace (náhrada za systémový alert) -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-28 opacity-0 transition-all duration-300 pointer-events-none bg-lime-400 text-slate-950 font-black px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-lime-300">
-        <i class="fa-solid fa-bolt text-xl text-slate-950"></i>
-        <span id="toast-message" class="text-sm font-bold">Akce proběhla úspěšně!</span>
+  <!-- ==================== NAVIGACE ==================== -->
+  <nav class="sticky top-0 z-40 bg-white/90 dark:bg-brand-dark/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-lime-500 to-emerald-400 flex items-center justify-center text-slate-950 text-xl font-black shadow-lg shadow-lime-500/20 group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <span class="text-2xl font-black tracking-tight text-slate-950 dark:text-white">
+          ENERGY <span class="text-lime-500">GUMS</span>
+        </span>
+      </a>
+
+      <!-- Desktop Odkazy -->
+      <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+        <a href="#hero" class="hover:text-lime-500 transition-colors">Domů</a>
+        <a href="#about" class="hover:text-lime-500 transition-colors">O nás</a>
+        <a href="#blog" class="hover:text-lime-500 transition-colors">Blog</a>
+        <a href="#sample" class="hover:text-lime-500 transition-colors">Vzorek zdarma</a>
+      </div>
+
+      <!-- Akce & Dark Mode -->
+      <div class="hidden md:flex items-center gap-4">
+        <button id="themeToggle" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-lime-500 transition-colors" title="Přepnout vzhled">
+          <i class="fa-solid fa-moon dark:hidden"></i>
+          <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+        </button>
+        <a href="#sample" class="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-lime-500/20 hover:scale-105 text-sm">
+          Vyzkoušet hned
+        </a>
+      </div>
+
+      <!-- Mobilní hamburger -->
+      <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-700 dark:text-slate-300">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
 
-    <!-- HORNÍ NAVIGAČNÍ LIŠTA -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/85 dark:bg-slate-950/85 border-b border-slate-200 dark:border-slate-800 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                
-                <!-- Logo -->
-                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchMainTab('home')">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-lime-400 via-emerald-400 to-cyan-400 flex items-center justify-center text-slate-950 shadow-lg shadow-lime-500/30 group-hover:scale-105 transition-transform duration-300">
-                        <i class="fa-solid fa-bolt text-2xl text-slate-950"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1">
-                            <span class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">ENERGY</span>
-                            <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-lime-400 to-emerald-400">GUMS</span>
-                        </div>
-                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-lime-600 dark:text-lime-400 block -mt-1">Akční energie & Biohacking</span>
-                    </div>
-                </div>
+    <!-- Mobilní menu -->
+    <div id="mobileMenu" class="hidden md:hidden px-4 pt-2 pb-6 bg-white dark:bg-brand-dark border-b border-slate-200 dark:border-slate-800 space-y-3">
+      <a href="#hero" class="block py-2 text-base font-semibold hover:text-lime-500">Domů</a>
+      <a href="#about" class="block py-2 text-base font-semibold hover:text-lime-500">O nás</a>
+      <a href="#blog" class="block py-2 text-base font-semibold hover:text-lime-500">Blog</a>
+      <a href="#sample" class="block py-2 text-base font-semibold text-lime-500">Získat vzorek zdarma</a>
+    </div>
+  </nav>
 
-                <!-- Desktop Navigace -->
-                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-bold">
-                    <button id="nav-btn-home" onclick="switchMainTab('home')" class="nav-item px-4 py-2 rounded-xl text-lime-500 bg-lime-500/10 transition-colors">
-                        <i class="fa-solid fa-house mr-1.5 text-xs"></i>Domů
-                    </button>
-                    <button id="nav-btn-about" onclick="switchMainTab('about')" class="nav-item px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-lime-400 transition-colors">
-                        <i class="fa-solid fa-users mr-1.5 text-xs"></i>O nás (5 členů)
-                    </button>
-                    <button id="nav-btn-blog" onclick="switchMainTab('blog')" class="nav-item px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-lime-400 transition-colors">
-                        <i class="fa-solid fa-newspaper mr-1.5 text-xs"></i>Blog
-                    </button>
-                    <button id="nav-btn-contact" onclick="switchMainTab('contact')" class="nav-item px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-lime-400 transition-colors">
-                        <i class="fa-solid fa-paper-plane mr-1.5 text-xs"></i>Kontakt
-                    </button>
-                </nav>
+  <!-- ==================== HERO SEKCIE ==================== -->
+  <section id="hero" class="relative overflow-hidden py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Textová část -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-lime-500/10 border border-lime-500/30 text-lime-600 dark:text-lime-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-bolt"></i> Nástup energie do 10 minut
+          </div>
 
-                <!-- Pravá lišta akcí -->
-                <div class="flex items-center gap-3">
-                    <button onclick="openModal('sample-modal')" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-lime-400 to-emerald-400 hover:from-lime-300 hover:to-emerald-300 text-slate-950 font-black text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl shadow-lg shadow-lime-500/20 hover:scale-105 active:scale-95 transition-all">
-                        <i class="fa-solid fa-gift"></i>
-                        <span>Vzorek zdarma</span>
-                    </button>
+          <h1 class="text-5xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-none text-slate-950 dark:text-white">
+            ENERGY <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-500 via-emerald-400 to-cyan-400 neon-text-lime">
+              GUMS
+            </span>
+          </h1>
 
-                    <!-- Dark / Light Mode Přepínač -->
-                    <button id="theme-toggle" class="p-2.5 rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors" title="Změnit motiv">
-                        <i id="theme-icon" class="fa-solid fa-sun text-base"></i>
-                    </button>
+          <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+            Jsme mladý pětičlenný tým, který odmítá nekonečné lití přeslazených plechovek do žaludku. Žijeme akčním životním stylem, sportujeme, tvoříme a naším cílem je co nejrychleji prorazit na trhu s moderní sublingvální formou čisté energie.
+          </p>
 
-                    <!-- Hamburger pro mobilní telefony -->
-                    <button id="mobile-menu-btn" class="md:hidden p-2.5 rounded-xl text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
-                </div>
+          <div class="flex flex-wrap gap-4 pt-4">
+            <a href="#sample" class="bg-gradient-to-r from-lime-500 to-emerald-400 hover:from-lime-400 hover:to-emerald-300 text-slate-950 text-base font-extrabold px-8 py-4 rounded-xl shadow-lg shadow-lime-500/25 transition-all hover:scale-105 flex items-center gap-2">
+              Chci vzorek zdarma <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#blog" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-7 py-4 rounded-xl transition-all flex items-center gap-2">
+              Přečíst náš blog
+            </a>
+          </div>
+
+          <!-- Rychlá fakta pod CTA -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200 dark:border-slate-800 text-center sm:text-left">
+            <div>
+              <div class="text-2xl font-black text-lime-500">5×</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">rychlejší než nápoj</div>
             </div>
+            <div>
+              <div class="text-2xl font-black text-cyan-400">0 g</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">přidaného cukru</div>
+            </div>
+            <div>
+              <div class="text-2xl font-black text-emerald-400">100%</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">kapesní formát</div>
+            </div>
+          </div>
         </div>
 
-        <!-- Mobilní vysouvací menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-2 shadow-2xl">
-            <button onclick="switchMainTab('home'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900">Domů</button>
-            <button onclick="switchMainTab('about'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900">O nás (Náš 5členný tým)</button>
-            <button onclick="switchMainTab('blog'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900">Blog (2 články)</button>
-            <button onclick="switchMainTab('contact'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900">Kontakt</button>
-            <button onclick="openModal('sample-modal'); toggleMobileMenu();" class="w-full mt-3 py-3 rounded-xl bg-lime-400 text-slate-950 font-black text-center">
-                Vyzkoušet vzorek zdarma
-            </button>
-        </div>
-    </header>
-
-    <!-- HLAVNÍ OBSAHOVÁ ČÁST -->
-    <main class="flex-grow">
-
-        <!-- =================== SEKCÍ: DOMŮ =================== -->
-        <section id="view-home" class="page-view space-y-16 pb-20">
-            <!-- HERO SEKCE -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10">
-                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-black border border-slate-800 p-6 sm:p-10 lg:p-14 text-white shadow-2xl">
-                    <!-- Glow prvky -->
-                    <div class="absolute -top-32 -right-32 w-96 h-96 bg-lime-500/25 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
-                        <!-- Levý sloupec: Velký nápis a text o mladém týmu -->
-                        <div class="lg:col-span-7 space-y-6">
-                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400 text-xs font-black tracking-wider uppercase">
-                                <i class="fa-solid fa-bolt animate-pulse"></i> Revoluce v kofeinu bez plechovek
-                            </div>
-
-                            <!-- Velký dominantní nápis ENERGY GUMS -->
-                            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.92]">
-                                ENERGY <br>
-                                <span class="bg-clip-text text-transparent bg-gradient-to-r from-lime-400 via-emerald-300 to-cyan-400">
-                                    GUMS
-                                </span>
-                            </h1>
-
-                            <p class="text-xl sm:text-2xl font-bold text-slate-200">
-                                Rychlejší než káva. Skladnější než plechovka. Čistý fokus bez žaludečních křečí.
-                            </p>
-
-                            <!-- Informace o firmě a cíli prorazit na trhu -->
-                            <div class="bg-slate-800/70 backdrop-blur-md rounded-2xl p-6 border border-slate-700/80 space-y-3">
-                                <div class="flex items-center gap-3 text-lime-400 font-extrabold text-sm uppercase tracking-wider">
-                                    <span class="w-7 h-7 rounded-lg bg-lime-400 text-slate-950 flex items-center justify-center font-black text-sm">5</span>
-                                    <span>Mladý pětičlenný tým v akci</span>
-                                </div>
-                                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                                    Jsme mladý pětičlenný tým, který se zabývá akčním životním stylem, sportem a biohackingem. Už nás nebavilo čekat desítky minut na nástup kávy ani do sebe lít přeslazené energy drinky před tréninkem či prací. Naším cílem je <strong>prorazit co nejrychleji na trhu</strong> a ukázat světu, že kofeinový bonbón vstřebatelný přes ústní sliznici je budoucnost.
-                                </p>
-                            </div>
-
-                            <!-- CTA Tlačítka -->
-                            <div class="flex flex-wrap gap-4 pt-2">
-                                <button onclick="openModal('sample-modal')" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-lime-400 via-lime-500 to-emerald-400 hover:from-lime-300 hover:to-emerald-300 text-slate-950 font-black text-base shadow-xl shadow-lime-500/25 transition-all hover:scale-105 active:scale-95 flex items-center gap-3">
-                                    <i class="fa-solid fa-gift text-lg"></i>
-                                    <span>VYZKOUŠET VZOREK ZDARMA</span>
-                                </button>
-                                <button onclick="switchMainTab('about')" class="px-6 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition-all flex items-center gap-2">
-                                    <i class="fa-solid fa-users text-lime-400"></i>
-                                    <span>Poznat náš 5členný tým</span>
-                                </button>
-                                <button onclick="switchMainTab('blog')" class="px-6 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition-all flex items-center gap-2">
-                                    <i class="fa-solid fa-book-open text-cyan-400"></i>
-                                    <span>Číst blog</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Pravý sloupec: Obrázek s gumídky -->
-                        <div class="lg:col-span-5 relative group">
-                            <div class="relative rounded-3xl overflow-hidden border-2 border-slate-700 shadow-2xl bg-slate-950 aspect-[4/4]">
-                                <img src="https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=1000&auto=format&fit=crop&q=80" 
-                                     alt="Barevné energetické gumídky Energy Gums" 
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-
-                                <div class="absolute bottom-4 left-4 right-4 bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl border border-slate-700/80 flex items-center justify-between">
-                                    <div>
-                                        <span class="text-xs font-black uppercase text-lime-400 tracking-wider">Sublinguální vstřebávání</span>
-                                        <h4 class="text-sm font-black text-white">Účinek už za 5 až 10 minut</h4>
-                                    </div>
-                                    <div class="w-10 h-10 rounded-xl bg-lime-400 text-slate-950 flex items-center justify-center font-black">
-                                        <i class="fa-solid fa-bolt"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tři klíčové přednosti -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="w-12 h-12 rounded-2xl bg-lime-400/10 text-lime-500 flex items-center justify-center text-xl font-black mb-4">
-                            <i class="fa-solid fa-stopwatch-20"></i>
-                        </div>
-                        <h3 class="text-lg font-black mb-2">Bleskový nástup</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">Při žvýkání proniká kofein přímo ústní sliznicí do krevního oběhu. Nečekáte 45 minut na trávení v žaludku.</p>
-                    </div>
-
-                    <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="w-12 h-12 rounded-2xl bg-cyan-400/10 text-cyan-400 flex items-center justify-center text-xl font-black mb-4">
-                            <i class="fa-solid fa-brain"></i>
-                        </div>
-                        <h3 class="text-lg font-black mb-2">Laserový fokus bez třesu</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">Kombinace kofeinu s L-Theaninem eliminuje nervozitu i bušení srdce. Zůstává pouze čistá mentální bdělost.</p>
-                    </div>
-
-                    <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 text-emerald-400 flex items-center justify-center text-xl font-black mb-4">
-                            <i class="fa-solid fa-feather-pointed"></i>
-                        </div>
-                        <h3 class="text-lg font-black mb-2">Kapsa místo batohu</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">Zapomeňte na tahání těžkých plechovek. Krabička Energy Gums se vejde do každé kapsy u běžeckých kraťasů i tašky.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================== SEKCÍ: O NÁS (5 OKÉNEK SE JMÉNY) =================== -->
-        <section id="view-about" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-            <!-- Úvod sekce O nás -->
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-500 dark:text-lime-400 text-xs font-black uppercase tracking-wider">
-                    <i class="fa-solid fa-users"></i> Pětice, která chce prorazit na trhu
-                </div>
-                <h2 class="text-3xl sm:text-5xl font-black tracking-tight">Kdo stojí za Energy Gums?</h2>
-                <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg">
-                    Žijeme akčním životním stylem, testujeme limity a nesnášíme pomalé tempo. Klikněte na kterékoliv okénko a poznejte nás blíže!
-                </p>
-            </div>
-
-            <!-- 5 OKÉNEK TÝMU: Tereza, Tereza, Vendula, Petr, Monika -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- 1. TEREZA (CEO & Tempo) -->
-                <div onclick="openTeamModal(0)" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-lime-400 dark:hover:border-lime-400 transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-lime-500/10 flex flex-col justify-between">
-                    <div>
-                        <div class="relative w-24 h-24 mx-auto mb-5 rounded-2xl overflow-hidden ring-4 ring-lime-400/40">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Tereza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h3 class="text-xl font-black text-center text-slate-900 dark:text-white">Tereza</h3>
-                        <p class="text-xs font-bold text-lime-500 text-center uppercase tracking-wider mt-1">CEO & Ředitelka tempa</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-3 line-clamp-2">
-                            „Když někdo řekne, že to nejde hned, beru si další dva gumídky a jdu mu ukázat opak.“
-                        </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-lime-500 group-hover:text-lime-400">
-                        <span>Rozkliknout profil</span>
-                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-
-                <!-- 2. TEREZA (Vrchní degustátorka) -->
-                <div onclick="openTeamModal(1)" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-400 transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-emerald-500/10 flex flex-col justify-between">
-                    <div>
-                        <div class="relative w-24 h-24 mx-auto mb-5 rounded-2xl overflow-hidden ring-4 ring-emerald-400/40">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80" alt="Tereza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h3 class="text-xl font-black text-center text-slate-900 dark:text-white">Tereza</h3>
-                        <p class="text-xs font-bold text-emerald-400 text-center uppercase tracking-wider mt-1">Vrchní degustátorka</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-3 line-clamp-2">
-                            Ochutnala 142 různých kyselých příchutí a tvrdí, že její chuťové pohárky mají fotografickou paměť.
-                        </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-emerald-400 group-hover:text-emerald-300">
-                        <span>Rozkliknout profil</span>
-                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-
-                <!-- 3. VENDULA (Marketing & Sociální sítě) -->
-                <div onclick="openTeamModal(2)" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-cyan-400 dark:hover:border-cyan-400 transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-cyan-500/10 flex flex-col justify-between">
-                    <div>
-                        <div class="relative w-24 h-24 mx-auto mb-5 rounded-2xl overflow-hidden ring-4 ring-cyan-400/40">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80" alt="Vendula" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h3 class="text-xl font-black text-center text-slate-900 dark:text-white">Vendula</h3>
-                        <p class="text-xs font-bold text-cyan-400 text-center uppercase tracking-wider mt-1">Marketing & TikTok Tornádo</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-3 line-clamp-2">
-                            Píše reels s tepovkou 180 za minutu a dokáže prodat kofeinový bonbón i spícímu medvědovi.
-                        </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-cyan-400 group-hover:text-cyan-300">
-                        <span>Rozkliknout profil</span>
-                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-
-                <!-- 4. PETR (Alchymista & Jediný kluk) -->
-                <div onclick="openTeamModal(3)" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-400 transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-amber-500/10 flex flex-col justify-between">
-                    <div>
-                        <div class="relative w-24 h-24 mx-auto mb-5 rounded-2xl overflow-hidden ring-4 ring-amber-400/40">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80" alt="Petr" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h3 class="text-xl font-black text-center text-slate-900 dark:text-white">Petr</h3>
-                        <p class="text-xs font-bold text-amber-400 text-center uppercase tracking-wider mt-1">Chemický alchymista</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-3 line-clamp-2">
-                            Jediný kluk v týmu 4 energických holek. Tvrdí, že kofein v gumídcích je jediný důvod, proč to přežívá.
-                        </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-amber-400 group-hover:text-amber-300">
-                        <span>Rozkliknout profil</span>
-                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-
-                <!-- 5. MONIKA (Finance & Logistika) -->
-                <div onclick="openTeamModal(4)" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-rose-400 dark:hover:border-rose-400 transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-rose-500/10 flex flex-col justify-between">
-                    <div>
-                        <div class="relative w-24 h-24 mx-auto mb-5 rounded-2xl overflow-hidden ring-4 ring-rose-400/40">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80" alt="Monika" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h3 class="text-xl font-black text-center text-slate-900 dark:text-white">Monika</h3>
-                        <p class="text-xs font-bold text-rose-400 text-center uppercase tracking-wider mt-1">Finance & Logistická ninja</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-3 line-clamp-2">
-                            Pohlídá každou korunu a zajistí, že balíček s gumídky dorazí k zákazníkovi rychleji než chuť na kávu.
-                        </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-rose-400 group-hover:text-rose-300">
-                        <span>Rozkliknout profil</span>
-                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Týmová společná výzva -->
-            <div class="bg-gradient-to-r from-slate-900 to-slate-950 p-8 sm:p-10 rounded-3xl border border-slate-800 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                    <h3 class="text-2xl font-black">Chcete náš tým podpořit v jízdě?</h3>
-                    <p class="text-slate-400 text-sm mt-1">Hledáme sportovce, studenty, gamery i ambasadory, kteří chtějí otestovat naše první šarže.</p>
-                </div>
-                <button onclick="openModal('sample-modal')" class="whitespace-nowrap px-6 py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-slate-950 font-black text-sm transition">
-                    Připojit se k testování
-                </button>
-            </div>
-        </section>
-
-        <!-- =================== SEKCÍ: BLOG (PŘESNĚ 2 ČLÁNKY) =================== -->
-        <section id="view-blog" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-            <!-- Záhlaví blogu -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-400/10 text-lime-500 dark:text-lime-400 text-xs font-black uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-newspaper"></i> Oficiální blog značky
-                    </div>
-                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Články a novinky z naší dílny</h2>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Dva klíčové články, které vám vysvětlí vše o naší vizi a revolučním produktu.</p>
-                </div>
-                <div class="w-full sm:w-72 relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="blog-search" oninput="filterBlogArticles(this.value)" placeholder="Hledat v článcích..." class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-lime-400">
-                </div>
-            </div>
-
-            <!-- Mřížka s přesně dvěma články -->
-            <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Článek 1 -->
-                <article class="blog-card bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-lime-400/50 transition-all duration-300 flex flex-col justify-between group">
-                    <div>
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80" alt="Zvýšení povědomí o energetických gumídcích" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <span class="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-lime-400 border border-lime-400/30 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                                Vize & Mise
-                            </span>
-                        </div>
-                        <div class="p-6 sm:p-8 space-y-3">
-                            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                                <span><i class="fa-regular fa-clock mr-1 text-lime-500"></i> 4 min čtení</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-user-pen mr-1"></i> Tereza (CEO)</span>
-                            </div>
-                            <h3 class="text-2xl font-black text-slate-900 dark:text-white group-hover:text-lime-500 transition-colors">
-                                Proč chceme zvýšit povědomí o energetických gumídcích
-                            </h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                                Většina lidí je zvyklá lít do sebe litry sycených limonád s kofeinem nebo pít horkou kávu za běhu. Chceme zbořit mýtus, že funkční kofein musí mít půl litru a nafouklé břicho.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6 sm:px-8 sm:pb-8 pt-2">
-                        <button onclick="openBlogDetail(0)" class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-lime-400 hover:text-slate-950 font-black text-xs sm:text-sm transition-colors flex items-center justify-center gap-2">
-                            <span>Číst celý článek</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </article>
-
-                <!-- Článek 2 -->
-                <article class="blog-card bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-cyan-400/50 transition-all duration-300 flex flex-col justify-between group">
-                    <div>
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=800&auto=format&fit=crop&q=80" alt="Co jsou Energy Gums a co přináší" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <span class="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-cyan-400 border border-cyan-400/30 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                                Produktový průvodce
-                            </span>
-                        </div>
-                        <div class="p-6 sm:p-8 space-y-3">
-                            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                                <span><i class="fa-regular fa-clock mr-1 text-cyan-400"></i> 6 min čtení</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-flask mr-1"></i> Petr (Alchymista)</span>
-                            </div>
-                            <h3 class="text-2xl font-black text-slate-900 dark:text-white group-hover:text-cyan-400 transition-colors">
-                                Co jsou Energy Gums a co vám vlastně přinesou?
-                            </h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                                Kompletní pohled pod pokličku: Jak funguje kombinace kofeinu, taurinu a L-Theaninu, proč v bonbónu není gram zbytečného cukru a jak z nich vytěžit maximum při sportu i zkouškách.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6 sm:px-8 sm:pb-8 pt-2">
-                        <button onclick="openBlogDetail(1)" class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-cyan-400 hover:text-slate-950 font-black text-xs sm:text-sm transition-colors flex items-center justify-center gap-2">
-                            <span>Číst celý článek</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Oznámení pro prázdné vyhledávání -->
-            <div id="blog-empty-search" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800">
-                <i class="fa-solid fa-magnifying-glass text-3xl text-slate-400 mb-3"></i>
-                <p class="font-bold">Nebyly nalezeny žádné články odpovídající hledání.</p>
-                <button onclick="document.getElementById('blog-search').value=''; filterBlogArticles('');" class="mt-3 text-lime-500 font-bold text-xs underline">
-                    Zobrazit oba články
-                </button>
-            </div>
-        </section>
-
-        <!-- =================== SEKCÍ: DETAIL ČLÁNKU NA BLOGU =================== -->
-        <section id="view-article-detail" class="page-view hidden max-w-4xl mx-auto px-4 sm:px-6 py-10">
-            <button onclick="switchMainTab('blog')" class="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-lime-500 mb-8 transition-colors">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Zpět na blog</span>
-            </button>
-
-            <div id="article-detail-content">
-                <!-- Dynamicky vloženo z JavaScriptu -->
-            </div>
-
-            <!-- KOMENTÁŘOVÁ SEKCE -->
-            <div class="mt-12 pt-10 border-t border-slate-200 dark:border-slate-800">
-                <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
-                    <i class="fa-regular fa-comments text-lime-500"></i>
-                    <span>Komentáře (<span id="article-comment-count">0</span>)</span>
-                </h3>
-
-                <div id="article-comments-container" class="space-y-4 mb-8">
-                    <!-- Komentáře z paměti -->
-                </div>
-
-                <!-- Formulář komentáře -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
-                    <h4 class="font-bold mb-1">Napište svůj názor</h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Máte zkušenost s kofeinovými gumídky? Dejte nám vědět.</p>
-                    <form onsubmit="handleCommentPost(event)" class="space-y-3">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <input type="text" id="comm-name" required placeholder="Vaše jméno *" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                            <input type="email" id="comm-email" placeholder="E-mail (nepovinné)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                        </div>
-                        <textarea id="comm-body" required rows="3" placeholder="Váš komentář k tématu..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400"></textarea>
-                        <button type="submit" class="bg-lime-400 hover:bg-lime-300 text-slate-950 font-black text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-md transition">
-                            Odeslat komentář
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================== SEKCÍ: KONTAKT =================== -->
-        <section id="view-contact" class="page-view hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="text-xs font-black uppercase text-lime-400 tracking-wider">Jsme tu pro vás</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-1">Spojte se s týmem Energy Gums</h2>
-                <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Máte dotaz k distribuci, složení nebo chcete otestovat vzorky pro váš sportovní klub či tým?</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Kontaktní formulář -->
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <h3 class="text-xl font-bold mb-4">Napište nám zprávu</h3>
-                    <form onsubmit="handleContactForm(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Jméno</label>
-                            <input type="text" required placeholder="Vaše jméno" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">E-mail</label>
-                            <input type="email" required placeholder="vas@email.cz" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Předmět</label>
-                            <select class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                                <option>Zájem o vzorky zdarma</option>
-                                <option>Velkoobchod a prodej</option>
-                                <option>Ambasadorství & sportovní spolupráce</option>
-                                <option>Jiný dotaz</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Zpráva</label>
-                            <textarea rows="4" required placeholder="Co máte na srdci?" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400"></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-slate-950 font-black text-sm transition shadow-lg shadow-lime-500/20">
-                            Odeslat zprávu
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Kontaktní info -->
-                <div class="space-y-6 flex flex-col justify-between">
-                    <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6 shadow-sm">
-                        <h3 class="text-xl font-bold">Přímé kontakty</h3>
-                        
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-lime-400/20 text-lime-500 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 uppercase font-bold">Oficiální e-mail</p>
-                                <p class="font-bold text-slate-900 dark:text-white">ahoj@energygums.cz</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-400/20 text-cyan-400 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 uppercase font-bold">Základna týmu</p>
-                                <p class="font-bold text-slate-900 dark:text-white">Brno / Praha, Česká republika</p>
-                                <p class="text-xs text-slate-400">Mladý pětičlenný startup</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-400/20 text-emerald-400 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-hashtag"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 uppercase font-bold">Sleduj náš launch</p>
-                                <div class="flex gap-3 mt-2">
-                                    <span class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-lime-400 cursor-pointer"><i class="fa-brands fa-instagram"></i></span>
-                                    <span class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-lime-400 cursor-pointer"><i class="fa-brands fa-tiktok"></i></span>
-                                    <span class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-lime-400 cursor-pointer"><i class="fa-brands fa-linkedin-in"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Banner pro odběr novinek -->
-                    <div class="bg-gradient-to-r from-lime-500 to-emerald-500 p-6 rounded-3xl text-slate-950 font-bold">
-                        <h4 class="text-lg font-black mb-1">Chcete být u první šarže?</h4>
-                        <p class="text-xs text-slate-900 font-medium mb-3">Zadejte e-mail a pošleme vám zprávu hned, jak gumídky vyjedou z linky.</p>
-                        <form onsubmit="handleNewsletterSubmit(event)" class="flex gap-2">
-                            <input type="email" required placeholder="vas@email.cz" class="bg-white/90 text-slate-950 placeholder-slate-500 text-xs px-3 py-2 rounded-xl w-full focus:outline-none">
-                            <button type="submit" class="bg-slate-950 text-white text-xs px-4 py-2 rounded-xl font-black shrink-0 hover:bg-slate-800">
-                                Odebírat
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- MODÁLNÍ OKNO: DETAIL ČLENA TÝMU -->
-    <div id="team-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative">
-            <button onclick="closeModal('team-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+        <!-- Vizuál s gumídky -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md rounded-3xl overflow-hidden border-2 border-lime-500/40 shadow-2xl neon-border">
+            <img 
+              src="https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&w=800&q=80" 
+              alt="Barevné energetické gumídky" 
+              class="w-full h-[430px] object-cover hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
             
-            <div class="flex items-center gap-4 mb-6">
-                <img id="team-modal-img" src="" alt="" class="w-20 h-20 rounded-2xl object-cover ring-4 ring-lime-400">
-                <div>
-                    <h3 id="team-modal-name" class="text-2xl font-black text-slate-900 dark:text-white">Jméno</h3>
-                    <p id="team-modal-role" class="text-xs font-bold text-lime-500 uppercase tracking-wider">Role</p>
-                    <span id="team-modal-tag" class="inline-block mt-1 text-[10px] font-black px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">#EnergyGums</span>
-                </div>
+            <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-white/10 dark:bg-slate-900/80 backdrop-blur-md border border-white/20 dark:border-slate-700/60 text-white">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-lime-400 animate-ping"></span>
+                <span class="text-xs font-bold tracking-widest text-lime-400 uppercase">Testovací fáze #1</span>
+              </div>
+              <p class="text-sm font-semibold mt-1">První várka ovocných kofeinových gumídků pro náš akční tým a komunitu.</p>
             </div>
-
-            <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-                    <p class="font-extrabold text-xs uppercase text-slate-400 mb-1">O mně a vize v týmu</p>
-                    <p id="team-modal-bio" class="leading-relaxed"></p>
-                </div>
-
-                <div class="p-4 rounded-2xl bg-lime-400/10 border border-lime-400/20 text-slate-800 dark:text-slate-200">
-                    <p class="font-extrabold text-xs uppercase text-lime-500 mb-1">Superschopnost / Vtipný fakt</p>
-                    <p id="team-modal-funfact" class="italic"></p>
-                </div>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                <button onclick="closeModal('team-modal')" class="px-5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-                    Zavřít okénko
-                </button>
-            </div>
+          </div>
         </div>
-    </div>
 
-    <!-- MODÁLNÍ OKNO: OBJEDNÁVKA VZORKU ZDARMA -->
-    <div id="sample-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative">
-            <button onclick="closeModal('sample-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
-                <i class="fa-solid fa-xmark text-xl"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SEKCIE O NÁS (5 OKÉNEK) ==================== -->
+  <section id="about" class="py-20 bg-slate-100 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <h2 class="text-xs font-black tracking-widest text-lime-500 uppercase">Náš pětičlenný tým</h2>
+        <h3 class="text-3xl sm:text-4xl font-black text-slate-950 dark:text-white">Kdo za Energy Gums stojí?</h3>
+        <p class="text-slate-600 dark:text-slate-400">
+          Jsme mladá parta, která místo vysedávání v korporátu žije sportem, outdoorovými výzvami a inovacemi. Klikněte na okénko a poznejte každého z nás!
+        </p>
+      </div>
+
+      <!-- 5 Karet týmu -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        
+        <!-- Tereza 1 -->
+        <div onclick="openTeamModal('tereza1')" class="group cursor-pointer bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-lime-500 transition-all hover:-translate-y-2 shadow-sm hover:shadow-xl text-center">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-lime-500/20 text-lime-500 flex items-center justify-center text-3xl font-black mb-4 group-hover:bg-lime-500 group-hover:text-slate-950 transition-colors">
+            T
+          </div>
+          <h4 class="font-bold text-lg text-slate-950 dark:text-white">Tereza</h4>
+          <p class="text-xs font-semibold text-lime-500 uppercase mt-1">CEO & Tahoun</p>
+          <span class="inline-block mt-4 text-xs text-slate-400 group-hover:text-lime-500 font-semibold underline">Otevřít profil →</span>
+        </div>
+
+        <!-- Tereza 2 -->
+        <div onclick="openTeamModal('tereza2')" class="group cursor-pointer bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all hover:-translate-y-2 shadow-sm hover:shadow-xl text-center">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl font-black mb-4 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
+            T
+          </div>
+          <h4 class="font-bold text-lg text-slate-950 dark:text-white">Tereza</h4>
+          <p class="text-xs font-semibold text-emerald-400 uppercase mt-1">Chuťový guru</p>
+          <span class="inline-block mt-4 text-xs text-slate-400 group-hover:text-emerald-400 font-semibold underline">Otevřít profil →</span>
+        </div>
+
+        <!-- Vendula -->
+        <div onclick="openTeamModal('vendula')" class="group cursor-pointer bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-cyan-500 transition-all hover:-translate-y-2 shadow-sm hover:shadow-xl text-center">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-3xl font-black mb-4 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
+            V
+          </div>
+          <h4 class="font-bold text-lg text-slate-950 dark:text-white">Vendula</h4>
+          <p class="text-xs font-semibold text-cyan-400 uppercase mt-1">Marketing Tornádo</p>
+          <span class="inline-block mt-4 text-xs text-slate-400 group-hover:text-cyan-400 font-semibold underline">Otevřít profil →</span>
+        </div>
+
+        <!-- Petr -->
+        <div onclick="openTeamModal('petr')" class="group cursor-pointer bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 transition-all hover:-translate-y-2 shadow-sm hover:shadow-xl text-center">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl font-black mb-4 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+            P
+          </div>
+          <h4 class="font-bold text-lg text-slate-950 dark:text-white">Petr</h4>
+          <p class="text-xs font-semibold text-amber-400 uppercase mt-1">Alchymista týmu</p>
+          <span class="inline-block mt-4 text-xs text-slate-400 group-hover:text-amber-400 font-semibold underline">Otevřít profil →</span>
+        </div>
+
+        <!-- Monika -->
+        <div onclick="openTeamModal('monika')" class="group cursor-pointer bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-purple-500 transition-all hover:-translate-y-2 shadow-sm hover:shadow-xl text-center">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-3xl font-black mb-4 group-hover:bg-purple-500 group-hover:text-slate-950 transition-colors">
+            M
+          </div>
+          <h4 class="font-bold text-lg text-slate-950 dark:text-white">Monika</h4>
+          <p class="text-xs font-semibold text-purple-400 uppercase mt-1">Logistika & Finance</p>
+          <span class="inline-block mt-4 text-xs text-slate-400 group-hover:text-purple-400 font-semibold underline">Otevřít profil →</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SEKCIE BLOG (2 ČLÁNKY) ==================== -->
+  <section id="blog" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-black tracking-widest text-lime-500 uppercase">Zákulisí & Věda</span>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-950 dark:text-white mt-1">Náš Blog</h2>
+        </div>
+        <p class="text-slate-500 dark:text-slate-400 text-sm max-w-md">
+          Píšeme otevřeně o tom, proč energetické bonbóny mění pravidla hry ve sportu i běžném fungování.
+        </p>
+      </div>
+
+      <!-- Kontejner pro články (přesně 2 články) -->
+      <div id="postsGrid" class="grid md:grid-cols-2 gap-8">
+        <!-- Renderováno přes JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FORMULÁŘ NA VZOREK ZDARMA ==================== -->
+  <section id="sample" class="py-16 bg-gradient-to-b from-slate-900 to-black text-white relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+      <div class="inline-block p-3 bg-lime-500/20 text-lime-400 rounded-2xl text-2xl font-black">
+        ⚡
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-black">Otestujte první várku jako první</h2>
+      <p class="text-slate-300 max-w-xl mx-auto text-base">
+        Chcete vyzkoušet vzorek Energy Gums před oficiálním vstupem na trh? Napište nám a my vám pošleme testovací balíček.
+      </p>
+
+      <form id="sampleForm" onsubmit="handleSampleSubmit(event)" class="max-w-md mx-auto grid grid-cols-1 gap-3 pt-4">
+        <input 
+          type="text" 
+          id="sampleName" 
+          placeholder="Vaše jméno" 
+          required 
+          class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-lime-500"
+        />
+        <input 
+          type="email" 
+          id="sampleEmail" 
+          placeholder="Váš e-mail" 
+          required 
+          class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-lime-500"
+        />
+        <button 
+          type="submit" 
+          class="w-full bg-lime-500 hover:bg-lime-400 text-slate-950 font-black py-3.5 rounded-xl transition-all shadow-lg shadow-lime-500/30 hover:scale-102"
+        >
+          Odeslat žádost o testovací balíček
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==================== PATIČKA ==================== -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-12 text-slate-400 text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-lime-500 flex items-center justify-center text-slate-950 font-black">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <span class="text-lg font-black text-white">ENERGY GUMS</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm">
+        <a href="#about" class="hover:text-white transition-colors">O týmu</a>
+        <a href="#blog" class="hover:text-white transition-colors">Blog</a>
+        <button onclick="openGdprModal()" class="hover:text-white underline transition-colors">
+          Ochrana osobních údajů (GDPR)
+        </button>
+        <button onclick="resetCookieConsent()" class="hover:text-lime-400 transition-colors">
+          Nastavení cookies
+        </button>
+      </div>
+
+      <div class="text-xs text-slate-500">
+        © 2026 Energy Gums. Všechna práva vyhrazena.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODÁL: PROFIL ČLENA TÝMU ==================== -->
+  <div id="teamModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-8 relative shadow-2xl">
+      <button onclick="closeTeamModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="teamModalContent" class="space-y-4">
+        <!-- Dynamický obsah -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODÁL: DETAIL ČLÁNKU BLOGU ==================== -->
+  <div id="postModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-10 relative shadow-2xl">
+      <button onclick="closePostModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="postModalContent" class="space-y-6">
+        <!-- Dynamický text článku a komentáře -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODÁL: OCHRANA ÚDAJŮ (GDPR) ==================== -->
+  <div id="gdprModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 relative shadow-2xl text-slate-800 dark:text-slate-200">
+      <button onclick="closeGdprModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-2 text-lime-500 font-bold text-sm uppercase">
+          <i class="fa-solid fa-shield-halved"></i> Soukromí & GDPR
+        </div>
+        <h3 class="text-2xl font-black text-slate-950 dark:text-white">Ochrana osobních údajů</h3>
+
+        <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-4 leading-relaxed">
+          <p>
+            <strong>1. Správce údajů:</strong> Správcem osobních údajů je projektový tým <em>Energy Gums</em> (kontakt: team@energygums.cz).
+          </p>
+          <p>
+            <strong>2. Jaké údaje zpracováváme:</strong>
+          </p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Formulář pro vzorek zdarma:</strong> Jméno a e-mailovou adresu, a to výhradně za účelem komunikace a vyřízení žádosti o testovací balíček.</li>
+            <li><strong>Diskuze a komentáře:</strong> Jméno a obsah komentáře vloženého pod blogové příspěvky.</li>
+            <li><strong>Analytické údaje:</strong> Anonymizované údaje o návštěvnosti prostřednictvím služeb Google Analytics 4 (ID: G-783LRPVM8Z) a Microsoft Clarity (ID: yxr4tamukt). Tyto nástroje měří návštěvnost, kliknutí a zobrazení pouze v případě, že k tomu udělíte souhlas v naší cookie liště.</li>
+          </ul>
+          <p>
+            <strong>3. Vaše práva:</strong> Máte plné právo požadovat informace o svých uložených údajích, jejich opravu, přenos nebo úplný výmaz z naší databáze.
+          </p>
+          <p>
+            <strong>4. Správa cookies:</strong> Svůj dříve udělený souhlas s analytickými cookies můžete kdykoliv změnit kliknutím na odkaz níže.
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+          <button onclick="resetCookieConsent()" class="text-xs text-lime-500 hover:underline font-bold">
+            Znovu otevřít volbu cookies
+          </button>
+          <button onclick="closeGdprModal()" class="bg-lime-500 text-slate-950 px-5 py-2 rounded-xl text-xs font-bold hover:bg-lime-400">
+            Rozumím
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== COOKIE BANNER (OPRAVDOVÝ OPT-IN) ==================== -->
+  <div id="cookieBanner" class="fixed bottom-4 left-4 right-4 sm:left-6 sm:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl border border-slate-800 z-50 hidden transition-all duration-300">
+    <div class="flex items-start gap-3">
+      <div class="p-2.5 bg-lime-500/20 text-lime-400 rounded-xl text-xl shrink-0">
+        🍪
+      </div>
+      <div class="space-y-3">
+        <div>
+          <h4 class="font-bold text-sm text-white">Využíváme cookies</h4>
+          <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+            Pomáhají nám zkoumat návštěvnost a zájem o Energy Gums přes Google Analytics a Microsoft Clarity. Žádná analytická data nesbíráme bez vašeho schválení.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="acceptAllCookies()" class="bg-lime-500 hover:bg-lime-400 text-slate-950 text-xs font-extrabold px-4 py-2 rounded-lg transition-colors">
+            Přijmout vše
+          </button>
+          <button onclick="rejectCookies()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-lg transition-colors">
+            Pouze nezbytné
+          </button>
+          <button onclick="openGdprModal()" class="text-xs text-slate-400 hover:text-white underline ml-auto">
+            Podrobnosti
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT: LOGIKA WEBU ==================== -->
+  <script>
+    // --- 1. DATA TÝMU ---
+    const TEAM_DATA = {
+      tereza1: {
+        name: "Tereza",
+        role: "CEO & Hlavní tahoun",
+        bio: "Vstává v 5:30 na ranní crossfit a nedokáže 5 minut v klidu sedět. Nesnáší rozlité energetické plechovky v batohu, a proto iniciovala vznik Energy Gums. Má zakázáno dát si víc než dva gumídky denně, jinak mluví rychleji než prodejce na teleshoppingu.",
+        superpower: "Dokáže zorganizovat 5 meetingů za 15 minut"
+      },
+      tereza2: {
+        name: "Tereza",
+        role: "Chuťový guru & Testování receptur",
+        bio: "Odmítla 43 prototypů, protože 'chutnaly příliš chemicky'. Dva měsíce měla fialový jazyk od testování lesních plodů a borůvek. Pokud vám gumídek zachutná od prvního sousta, je to výhradně její zásluha.",
+        superpower: "Absolutní chuťová paměť na lesní plody"
+      },
+      vendula: {
+        name: "Vendula",
+        role: "Marketing Tornádo",
+        bio: "Žije sociálními sítěmi a jejím cílem je, aby o Energy Gums slyšel každý sportovec v republice dřív, než dopije svůj ionťák. Když natáčí video na TikTok, tepovka jí stoupá na 180 bez jakéhokoliv kofeinu.",
+        superpower: "Generování virálních nápadů ve 3 ráno"
+      },
+      petr: {
+        name: "Petr",
+        role: "Chemický alchymista",
+        bio: "Jediný kluk v pětičlenném týmu, který v labu hlídá miligramy kofeinu, taurinu a L-theaninu. Přežívá díky gumídkům a vědeckým studiím o vstřebávání látek přes ústní sliznici.",
+        superpower: "Vypočítá nástup účinku kofeinu z hlavy"
+      },
+      monika: {
+        name: "Monika",
+        role: "Logistika & Finanční ninja",
+        bio: "Zatímco zbytek týmu létá v oblacích a sní o ovládnutí světového trhu, Monika hlídá rozpočet, krabičky a dodavatele. Bez ní by tým místo žvýkání skončil na ulici.",
+        superpower: "Najde ztracenou zásilku do 30 vteřin"
+      }
+    };
+
+    // --- 2. DATA PRO 2 ČLÁNKY BLOGU ---
+    const POSTS = [
+      {
+        id: 1,
+        title: "Proč chceme zvýšit povědomí o energetických gumídcích",
+        perex: "Klasické energy drinky jsou plné cukru a bublin. Chceme ukázat, že energie pro sport i práci se dá doručit čistě a 5× rychleji.",
+        date: "14. října 2026",
+        readTime: "3 min čtení",
+        category: "Mise & Vize",
+        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
+        content: `
+          <p>Když se podíváte na dnešní regály s povzbuzujícími prostředky, uvidíte pořád to samé: půllitrové plechovky plné vody, cukru a kyselin. Pokud běžíte, jedete na kole nebo sedíte na dlouhé přednášce, nalít do sebe půl litru tekutiny je to poslední, co váš žaludek potřebuje.</p>
+          <br>
+          <p><strong>Náš cíl je jasný:</strong> Zvýšit povědomí o tom, že kofein nemusí procházet celým trávicím traktem 45 minut. Žvýkáním energetických gumídků dochází ke vstřebávání přes sliznici v ústech už během 5 až 10 minut. Chceme na trh přinést funkční, čistou a bleskovou alternativu.</p>
+        `,
+        comments: [
+          { author: "Lukáš", text: "Konečně něco normálního na běhání! Ty plechovky mi v žaludku vždycky dělaly paseku." }
+        ]
+      },
+      {
+        id: 2,
+        title: "Co jsou vlastně Energy Gums a co vám přinášejí?",
+        perex: "Pohled pod kapotu naší receptury. Jak funguje synergie kofeinu, taurinu a nootropik v jednom kapesním želé bonbónu.",
+        date: "10. října 2026",
+        readTime: "4 min čtení",
+        category: "Věda & Složení",
+        image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=800&q=80",
+        content: `
+          <p>Energy Gums nejsou jen obyčejné sladkosti. Jsou vyvinuty jako funkční stimulant pro sportovce, řidiče, studenty i hráče esportu, kteří potřebují okamžitý fokus bez energetického propadu (tzv. sugar crash).</p>
+          <br>
+          <p><strong>Klíčové benefity v kostce:</strong></p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Bleskový nástup:</strong> Slizniční vstřebávání obchází trávicí proces.</li>
+            <li><strong>Čistá hlava:</strong> Kombinace kofeinu s L-Theaninem eliminuje nervozitu a třes rukou.</li>
+            <li><strong>0 % zbytečného cukru:</strong> Žádné zbytečné kalorie navíc.</li>
+            <li><strong>Kapesní balení:</strong> Vejde se do každé kapsy u dresu i kalhot.</li>
+          </ul>
+        `,
+        comments: [
+          { author: "Markéta", text: "Využívám při nočních směnách v nemocnici a je to obrovský rozdíl oproti kávě." }
+        ]
+      }
+    ];
+
+    // --- 3. VYKRESLENÍ BLOGU ---
+    function renderBlog() {
+      const container = document.getElementById('postsGrid');
+      container.innerHTML = POSTS.map(post => `
+        <article class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+          <div>
+            <div class="relative h-56 overflow-hidden">
+              <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-4 left-4 bg-lime-500 text-slate-950 text-xs font-black uppercase px-3 py-1 rounded-lg">
+                ${post.category}
+              </span>
+            </div>
+            <div class="p-6 sm:p-8 space-y-3">
+              <div class="flex items-center gap-3 text-xs text-slate-400">
+                <span>${post.date}</span>
+                <span>•</span>
+                <span>${post.readTime}</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-black text-slate-950 dark:text-white leading-snug group-hover:text-lime-500 transition-colors">
+                ${post.title}
+              </h3>
+              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                ${post.perex}
+              </p>
+            </div>
+          </div>
+          <div class="p-6 sm:p-8 pt-0">
+            <button onclick="openPostModal(${post.id})" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-lime-500 hover:text-slate-950 text-slate-800 dark:text-white font-bold py-3 rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+              Číst celý článek <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 bg-lime-400 text-slate-950 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-black shadow-lg shadow-lime-500/30">
-                    <i class="fa-solid fa-gift"></i>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // --- 4. OVLÁDÁNÍ MODÁLU BLOGU A KOMENTÁŘŮ ---
+    function openPostModal(id) {
+      const post = POSTS.find(p => p.id === id);
+      if (!post) return;
+
+      const content = document.getElementById('postModalContent');
+      content.innerHTML = `
+        <div class="space-y-4">
+          <span class="text-xs font-black text-lime-500 uppercase tracking-wider">${post.category}</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white leading-tight">${post.title}</h2>
+          <div class="flex items-center gap-3 text-xs text-slate-400 pb-4 border-b border-slate-200 dark:border-slate-800">
+            <span>${post.date}</span>
+            <span>•</span>
+            <span>${post.readTime}</span>
+          </div>
+          <div class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+            ${post.content}
+          </div>
+
+          <!-- Komentáře -->
+          <div class="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
+            <h4 class="font-bold text-lg text-slate-950 dark:text-white">Komentáře (${post.comments.length})</h4>
+            
+            <div id="commentsList" class="space-y-3">
+              ${post.comments.map(c => `
+                <div class="p-4 bg-slate-100 dark:bg-slate-800/60 rounded-xl text-sm">
+                  <span class="font-bold text-lime-500">${c.author}</span>
+                  <p class="text-slate-600 dark:text-slate-300 mt-1">${c.text}</p>
                 </div>
-                <h3 class="text-2xl font-black">Vyzkoušej Energy Gums</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pošleme vám vzorek z první testovací várky přímo do schránky!</p>
+              `).join('')}
             </div>
-            <form onsubmit="handleSampleOrder(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Jméno a příjmení *</label>
-                    <input type="text" required placeholder="Vaše jméno" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">E-mail *</label>
-                    <input type="email" required placeholder="vas@email.cz" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Doručovací adresa (pro vzorek) *</label>
-                    <input type="text" required placeholder="Ulice, č.p., Město, PSČ" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Preferovaná chuť</label>
-                    <select class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-lime-400">
-                        <option>Kyselá Limetka & Zelené Jablko</option>
-                        <option>Elektrická Lesní Borůvka</option>
-                        <option>Polární Ledový Mentol</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-slate-950 font-black text-sm transition shadow-lg shadow-lime-500/25">
-                    ODESLAT ŽÁDOST O VZOREK
-                </button>
+
+            <!-- Přidání komentáře -->
+            <form onsubmit="handleAddComment(event, ${post.id})" class="space-y-3 pt-2">
+              <input type="text" id="commentAuthor" placeholder="Vaše jméno" required class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:border-lime-500">
+              <textarea id="commentText" placeholder="Napište svůj názor..." required class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:border-lime-500" rows="3"></textarea>
+              <button type="submit" class="bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider">
+                Přidat komentář
+              </button>
             </form>
+          </div>
         </div>
-    </div>
+      `;
+      document.getElementById('postModal').classList.remove('hidden');
+    }
 
-    <!-- PATIČKA STRÁNKY -->
-    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-                <!-- Sloupec 1: Brand -->
-                <div class="space-y-3 md:col-span-1">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-lime-400 flex items-center justify-center text-slate-950 font-black text-sm">
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                        <span class="text-xl font-black">ENERGY GUMS</span>
-                    </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Mladý 5členný tým, který mění pravidla kofeinového trhu. Rychlá energie pro sport, gaming i soustředění.
-                    </p>
-                </div>
+    function closePostModal() {
+      document.getElementById('postModal').classList.add('hidden');
+    }
 
-                <!-- Sloupec 2: Rychlé odkazy -->
-                <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Rychlá navigace</h4>
-                    <ul class="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                        <li><button onclick="switchMainTab('home')" class="hover:text-lime-500">Úvodní stránka</button></li>
-                        <li><button onclick="switchMainTab('about')" class="hover:text-lime-500">O nás (Náš 5členný tým)</button></li>
-                        <li><button onclick="switchMainTab('blog')" class="hover:text-lime-500">Blog (2 články)</button></li>
-                        <li><button onclick="switchMainTab('contact')" class="hover:text-lime-500">Kontakt & Ambasadoři</button></li>
-                    </ul>
-                </div>
+    function handleAddComment(e, postId) {
+      e.preventDefault();
+      const author = document.getElementById('commentAuthor').value;
+      const text = document.getElementById('commentText').value;
 
-                <!-- Sloupec 3: Náš tým -->
-                <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-900 dark:text-white mb-3">5 zakladatelů</h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Tereza • Tereza • Vendula • Petr • Monika. Společně s cílem co nejrychleji prorazit na trhu moderních stimulantů.
-                    </p>
-                </div>
+      const post = POSTS.find(p => p.id === postId);
+      if (post) {
+        post.comments.push({ author, text });
+        openPostModal(postId);
+      }
+    }
 
-                <!-- Sloupec 4: Testovací balíček -->
-                <div>
-                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Chceš ochutnat?</h4>
-                    <button onclick="openModal('sample-modal')" class="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-lime-400 hover:text-slate-950 text-xs font-bold border border-slate-200 dark:border-slate-800 transition">
-                        Získat testovací balíček zdarma
-                    </button>
-                </div>
-            </div>
+    // --- 5. OVLÁDÁNÍ MODÁLU TÝMU ---
+    function openTeamModal(key) {
+      const person = TEAM_DATA[key];
+      if (!person) return;
 
-            <div class="pt-8 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-                <p>© 2026 Energy Gums. Všechna práva vyhrazena. Vytvořeno pro akční život bez únavy.</p>
-                <p class="flex items-center gap-1 text-slate-400">
-                    <span>Vyvinuto s láskou k rychlému kofeinu</span>
-                    <i class="fa-solid fa-bolt text-lime-400"></i>
-                </p>
-            </div>
+      const content = document.getElementById('teamModalContent');
+      content.innerHTML = `
+        <div class="text-center space-y-2">
+          <div class="w-20 h-20 mx-auto rounded-3xl bg-lime-500/20 text-lime-500 flex items-center justify-center text-3xl font-black">
+            ${person.name[0]}
+          </div>
+          <h3 class="text-2xl font-black text-slate-950 dark:text-white">${person.name}</h3>
+          <p class="text-xs font-bold text-lime-500 uppercase">${person.role}</p>
         </div>
-    </footer>
+        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed pt-2">
+          ${person.bio}
+        </p>
+        <div class="p-3 bg-lime-500/10 border border-lime-500/20 rounded-xl text-xs text-lime-600 dark:text-lime-400">
+          <strong>Superschopnost:</strong> ${person.superpower}
+        </div>
+      `;
+      document.getElementById('teamModal').classList.remove('hidden');
+    }
 
-    <!-- JAVASCRIPT: INTERAKTIVITA, TÝM, BLOG A KOMENTÁŘE -->
-    <script>
-        // DATA O 5 ČLENECH TÝMU (Tereza, Tereza, Vendula, Petr, Monika)
-        const TEAM_MEMBERS = [
-            {
-                name: "Tereza",
-                role: "CEO & Závislačka na tempu",
-                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80",
-                tag: "#TempoBezPauzy",
-                bio: "Tereza je motor celé naší party. Vstává v 5:30, do 7:00 má odcvičeno a v 8:00 už nám posílá 14 úkolů s deadlinem 'včera bylo pozdě'. Právě ona přišla s nápadem na Energy Gums, když jí během maratonu došly síly a odmítla tahat lepkavé gely s chemickou pachutí.",
-                funfact: "Když jí nabídnete běžnou bezkofeinovou kávu, podívá se na vás tak, že se vám i smartwatch restartují. Má v sobě tolik energie, že by mohla napájet menší obec."
-            },
-            {
-                name: "Tereza",
-                role: "Vrchní degustátorka & Krotitelka chaosu",
-                image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80",
-                tag: "#KyselostJeZivot",
-                bio: "Druhá Tereza v týmu (říkáme jí 'Terka 2' nebo 'Chuťová policie'). Má na starosti to nejdůležitější – aby naše kofeinové bonbóny nechutnaly jako rozpuštěná lékárna, ale jako absolutně návyková lahůdka, na kterou se budete těšit před každým tréninkem.",
-                funfact: "Při vývoji limetkové příchuti snědla tolik kyselých vzorků, že se jí na tři dny změnil hlas a dokázala citovat recepturu pozpátku."
-            },
-            {
-                name: "Vendula",
-                role: "Královna marketingu & 300 tepů za minutu",
-                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80",
-                tag: "#ViralGums",
-                bio: "Vendula žije sociálními sítěmi a akčním obsahem. Dokáže natočit deset virálních videí na TikTok ještě předtím, než Petr stihne zamíchat první zkumavku. Jejím cílem je, aby do konce roku neměl v kapse krabičku Energy Gums jen ten, kdo žije pod kamenem.",
-                funfact: "Tvrdí, že kofeinový gumídek dokáže vyřešit 99 % problémů lidstva. Tím zbývajícím 1 % je nedostatek dalších gumídků."
-            },
-            {
-                name: "Petr",
-                role: "Chemický alchymista & Jediný kluk v týmu",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80",
-                tag: "#PrezivsiPetr",
-                bio: "Petr má na starosti složení: přesné poměry kofeinu, taurinu a L-Theaninu tak, aby vstřebávání v ústech začalo do 5 minut a nezpůsobovalo žaludeční nevolnost. Je zároveň jediným klukem v pětičlenné sestavě, což popisuje jako 'extrémní školu diplomacie a rychlých ústupů'.",
-                funfact: "Když se ho zeptáte, jak zvládá pracovat se čtyřmi hyperaktivními holkami, usměje se a ukáže na svou tajnou krabičku Energy Gums se slovy: 'Kluci, bez tohohle bych nepřežil ani ranní status meeting.'"
-            },
-            {
-                name: "Monika",
-                role: "Finance & Logistická ninja",
-                image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=80",
-                tag: "#CislaNelzou",
-                bio: "Monika drží náš rozpočet a tok balíčků pevně pod kontrolou. Zatímco ostatní vymýšlejí šílené nápady na obří bannery, Monika chladně spočítá marže, domluví přepravce a zajistí, aby balíček gumídků dorazil k vám domů dřív, než vám klesne hladina energie.",
-                funfact: "Umí v Excelu udělat makro na cokoliv – proslýchá se, že si vytvořila tabulku i na to, v kolik sekund si má dát další gumídek pro ideální průběh pracovního flow."
-            }
-        ];
+    function closeTeamModal() {
+      document.getElementById('teamModal').classList.add('hidden');
+    }
 
-        // PŘESNĚ DVA ČLÁNKY PRO BLOG
-        const BLOG_ARTICLES = [
-            {
-                id: 1,
-                title: "Proč chceme zvýšit povědomí o energetických gumídcích",
-                subtitle: "Konec nafouklým břichům z plechovek a revoluce ve vstřebávání kofeinu",
-                category: "Vize & Mise",
-                readTime: "4 min čtení",
-                author: "Tereza (CEO)",
-                authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-                image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1000&auto=format&fit=crop&q=80",
-                content: `
-                    <p class="lead font-bold text-xl text-slate-800 dark:text-slate-100 mb-6">
-                        Když se rozhlédnete po fitku, kanceláři nebo univerzitní knihovně, uvidíte pořád stejný obrázek: stoly plné plechovek od přeslazených energetických nápojů nebo kelímky s vystydlou kávou. Jako mladý pětičlenný tým jsme si řekli dost. Chceme zvýšit povědomí o tom, že energie v 21. století se dá přijímat chytřeji, čistěji a bez zbytečného zatěžování těla.
-                    </p>
+    // --- 6. GDPR A COOKIES LOGIKA ---
+    function checkCookieConsent() {
+      const consent = localStorage.getItem('energy_gums_cookie_consent');
+      if (consent === 'granted') {
+        runAnalytics();
+      } else if (!consent) {
+        document.getElementById('cookieBanner').classList.remove('hidden');
+      }
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Problém, o kterém nikdo nemluví: Žaludek plný tekutin</h3>
-                    <p>
-                        Zkuste si dát půl litru bublinkového nápoje deset minut před těžkým tréninkem nohou, sprintem nebo intenzivním zápasem. Co se stane? V žaludku máte těžký balón vody, bublinky tlačí na bránici a tělo místo výkonu spotřebovává krev na to, aby tekutinu v trávicím traktu vůbec zpracovalo. 
-                    </p>
-                    <p>
-                        Klasické nápoje navíc procházejí celým žaludkem a játry – to znamená, že kofeinový efekt pocítíte nejdříve za 30 až 45 minut. Pokud potřebujete okamžitý fokus teď hned, máte smůlu.
-                    </p>
+    function acceptAllCookies() {
+      localStorage.setItem('energy_gums_cookie_consent', 'granted');
+      document.getElementById('cookieBanner').classList.add('hidden');
+      runAnalytics();
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Naše řešení: Sublinguální absorpce za 5 až 10 minut</h3>
-                    <p>
-                        Energetické gumídky <strong>Energy Gums</strong> pracují na principu slizničního vstřebávání. Když gumídek žvýkáte, aktivní látky se uvolňují přímo v ústní dutině a přes bohatě prokrvené kapiláry pod jazykem a na dásních pronikají rovnou do krevního oběhu. 
-                    </p>
-                    <ul class="list-disc pl-6 space-y-2 my-4">
-                        <li><strong>Okamžitý nástup:</strong> První mentální impuls cítíte už po 5 až 10 minutách.</li>
-                        <li><strong>Nulové zatížení trávení:</strong> Žádné litry vody v břiše, žádné pálení žáhy.</li>
-                        <li><strong>Kompaktní balení:</strong> Celé balení váží pár gramů a vejde se do kapsy u šortek.</li>
-                    </ul>
+    function rejectCookies() {
+      localStorage.setItem('energy_gums_cookie_consent', 'denied');
+      document.getElementById('cookieBanner').classList.add('hidden');
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Chceme prorazit a změnit návyky Česka</h3>
-                    <p>
-                        Naším společným cílem v pěti lidech je co nejrychleji dostat tento funkční produkt mezi sportovce, řidiče, studenty i noční dříče. Věříme, že jakmile jednou zažijete ten rozdíl, už se k tahání plechovek nikdy nevrátíte.
-                    </p>
-                `
-            },
-            {
-                id: 2,
-                title: "Co jsou Energy Gums a co vám vlastně přinesou?",
-                subtitle: "Kombinace kofeinu, taurinu a L-Theaninu v kapesním bonbónu bez cukru",
-                category: "Produktový průvodce",
-                readTime: "6 min čtení",
-                author: "Petr (Alchymista)",
-                authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
-                image: "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=1000&auto=format&fit=crop&q=80",
-                content: `
-                    <p class="lead font-bold text-xl text-slate-800 dark:text-slate-100 mb-6">
-                        Pojem 'kofeinový bonbón' nebo 'energetický gumídek' může znít jako sladkost, ale nenechte se mýlit. Energy Gums jsou precizně vyvinutý funkční nootropický doplněk pro ty, kteří vyžadují maximální mentální a fyzický výkon. Podívejme se přesně na to, co se skrývá uvnitř.
-                    </p>
+    function resetCookieConsent() {
+      localStorage.removeItem('energy_gums_cookie_consent');
+      closeGdprModal();
+      document.getElementById('cookieBanner').classList.remove('hidden');
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Co přesně v jednom kousku najdete?</h3>
-                    <p>
-                        Při vývoji jsme s holkami strávili desítky hodin v laboratoři, abychom dosáhli synergického efektu, kdy se jednotlivé složky navzájem doplňují:
-                    </p>
+    function openGdprModal() {
+      document.getElementById('gdprModal').classList.remove('hidden');
+    }
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
-                        <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-black text-lime-500 mb-1">⚡ Kofein (čistý bezvodý)</h4>
-                            <p class="text-xs text-slate-600 dark:text-slate-300">Blokuje adenosinové receptory únavy v mozku, zvyšuje bdělost a připravenost reagovat.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-black text-cyan-400 mb-1">🧠 L-Theanin</h4>
-                            <p class="text-xs text-slate-600 dark:text-slate-300">Přírodní aminokyselina ze zeleného čaje, která maže 'nervózní třes' z kofeinu a přináší klidné laserové soustředění.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-black text-emerald-400 mb-1">🐂 Taurin</h4>
-                            <p class="text-xs text-slate-600 dark:text-slate-300">Podporuje neuromuskulární koordinaci a správné buněčné hospodaření s elektrolyty při zátěži.</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-black text-amber-400 mb-1">🌿 Vitaminový B-komplex</h4>
-                            <p class="text-xs text-slate-600 dark:text-slate-300">Vitamíny B6 a B12 podporují přirozený energetický metabolismus a činnost nervové soustavy.</p>
-                        </div>
-                    </div>
+    function closeGdprModal() {
+      document.getElementById('gdprModal').classList.add('hidden');
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Co vám Energy Gums přinesou v praxi?</h3>
-                    <ul class="list-disc pl-6 space-y-3 my-4">
-                        <li><strong>Při sportu a běhu:</strong> Gumídek si dáte kilometr před prudkým kopcem nebo v poločase zápasu. Žádné těžké břicho, jen nával čerstvé síly do svalů.</li>
-                        <li><strong>Za volantem při nočních jízdách:</strong> Nemusíte každou hodinu zastavovat na pumpě na předražené kafe ani řešit, kam vyhodit prázdnou plechovku.</li>
-                        <li><strong>Při práci a studiu:</strong> Okamžitý stop pro 'mozkovou mlhu' po obědě. Vyhnete se typickému cukrovému propadu, protože Energy Gums jsou kompletně bez cukru.</li>
-                    </ul>
+    // --- 7. ODESLÁNÍ VZORKU ---
+    function handleSampleSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('sampleName').value;
+      alert(`Díky ${name}! Vaši žádost jsme zaznamenali. Ozveme se hned, jak budeme odesílat balíčky.`);
+      e.target.reset();
+    }
 
-                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-8 mb-4">Závěr</h3>
-                    <p>
-                        Energy Gums nejsou kouzlo, je to moderní biochemie zabalená do skvělé osvěžující chuti. Vyzkoušejte náš testovací vzorek a posuďte sami!
-                    </p>
-                `
-            }
-        ];
+    // --- 8. DARK / LIGHT MÓD & INICIALIZACE ---
+    const themeToggleBtn = document.getElementById('themeToggle');
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
 
-        // AKTIVNÍ STAV ČLÁNKU V DETAILU
-        let currentArticleIndex = 0;
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    mobileMenuBtn.addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
 
-        // SPRÁVA KOMENTÁŘŮ V LOCALSTORAGE
-        function getComments(articleId) {
-            const data = localStorage.getItem('eg_comments_' + articleId);
-            if (data) {
-                try { return JSON.parse(data); } catch(e) { return []; }
-            }
-            if (articleId === 1) {
-                return [
-                    { name: "Marek (Crossfit Brno)", text: "Konečně to někdo řekl nahlas! Pít před tréninkem půl litru bublin je peklo. Držím pětičlennému týmu palce, chci krabičku na test!", date: "Před 2 hodinami" },
-                    { name: "Lucie K.", text: "Kyselá limetka je naprosto boží. Nástup do pár minut fakt funguje.", date: "Včera" }
-                ];
-            } else {
-                return [
-                    { name: "Daniel – programátor", text: "Kombinace kofeinu s theaninem je svatý grál biohackingu. Super, že jste to dali do gumídků bez cukru.", date: "Před 1 dnem" }
-                ];
-            }
-        }
-
-        function saveComments(articleId, comments) {
-            localStorage.setItem('eg_comments_' + articleId, JSON.stringify(comments));
-        }
-
-        // PŘEPÍNÁNÍ ZÁLOŽEK / SEKCÍ STRÁNKY
-        function switchMainTab(tabName) {
-            document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
-
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.classList.remove('text-lime-500', 'bg-lime-500/10', 'text-slate-900', 'dark:text-white');
-                btn.classList.add('text-slate-600', 'dark:text-slate-300');
-            });
-
-            const target = document.getElementById('view-' + tabName);
-            if (target) {
-                target.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            const activeBtn = document.getElementById('nav-btn-' + tabName);
-            if (activeBtn) {
-                activeBtn.classList.add('text-lime-500', 'bg-lime-500/10');
-                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
-            }
-        }
-
-        // ZOBRAZENÍ DETAILU ČLÁNKU
-        function openBlogDetail(index) {
-            currentArticleIndex = index;
-            const article = BLOG_ARTICLES[index];
-            if (!article) return;
-
-            const container = document.getElementById('article-detail-content');
-            container.innerHTML = `
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3">
-                        <span class="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-lime-400 text-slate-950">${article.category}</span>
-                        <span class="text-xs text-slate-400 font-semibold"><i class="fa-regular fa-clock mr-1"></i> ${article.readTime}</span>
-                    </div>
-                    <h1 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">${article.title}</h1>
-                    <p class="text-lg text-slate-500 dark:text-slate-400 font-medium">${article.subtitle}</p>
-                    <div class="flex items-center gap-3 pt-3">
-                        <img src="${article.authorAvatar}" class="w-10 h-10 rounded-full object-cover ring-2 ring-lime-400" alt="${article.author}">
-                        <div>
-                            <p class="text-xs font-black text-slate-900 dark:text-white">${article.author}</p>
-                            <p class="text-[10px] text-lime-500 font-bold uppercase">Energy Gums Zakladatel</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="rounded-3xl overflow-hidden shadow-2xl mb-8 max-h-[460px] border border-slate-200 dark:border-slate-800">
-                    <img src="${article.image}" class="w-full h-full object-cover" alt="${article.title}">
-                </div>
-                <div class="prose-custom text-slate-700 dark:text-slate-300 text-base sm:text-lg leading-relaxed space-y-4">
-                    ${article.content}
-                </div>
-            `;
-
-            renderArticleComments();
-            switchMainTab('article-detail');
-        }
-
-        // VYKRESLENÍ KOMENTÁŘŮ
-        function renderArticleComments() {
-            const article = BLOG_ARTICLES[currentArticleIndex];
-            const comments = getComments(article.id);
-            const countEl = document.getElementById('article-comment-count');
-            const listEl = document.getElementById('article-comments-container');
-
-            countEl.textContent = comments.length;
-            listEl.innerHTML = '';
-
-            if (comments.length === 0) {
-                listEl.innerHTML = '<p class="text-xs text-slate-400 italic">Zatím žádné komentáře. Buďte první!</p>';
-                return;
-            }
-
-            comments.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm space-y-1';
-                item.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="font-black text-slate-900 dark:text-white">${escapeHTML(c.name)}</span>
-                        <span class="text-[11px] text-slate-400">${escapeHTML(c.date || 'Právě teď')}</span>
-                    </div>
-                    <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">${escapeHTML(c.text)}</p>
-                `;
-                listEl.appendChild(item);
-            });
-        }
-
-        // ODESLÁNÍ KOMENTÁŘE
-        function handleCommentPost(e) {
-            e.preventDefault();
-            const name = document.getElementById('comm-name').value.trim();
-            const text = document.getElementById('comm-body').value.trim();
-            if (!name || !text) return;
-
-            const article = BLOG_ARTICLES[currentArticleIndex];
-            const comments = getComments(article.id);
-            comments.unshift({
-                name: name,
-                text: text,
-                date: 'Právě teď'
-            });
-
-            saveComments(article.id, comments);
-            renderArticleComments();
-            document.getElementById('comm-name').value = '';
-            document.getElementById('comm-email').value = '';
-            document.getElementById('comm-body').value = '';
-            showToast("Komentář byl úspěšně přidán na blog!");
-        }
-
-        // FILTRACE ČLÁNKŮ V BLOGU
-        function filterBlogArticles(query) {
-            const q = query.toLowerCase().trim();
-            const cards = document.querySelectorAll('.blog-card');
-            const emptyNotice = document.getElementById('blog-empty-search');
-            let visibleCount = 0;
-
-            cards.forEach((card, idx) => {
-                const article = BLOG_ARTICLES[idx];
-                const match = article.title.toLowerCase().includes(q) || 
-                              article.content.toLowerCase().includes(q) || 
-                              article.author.toLowerCase().includes(q);
-                if (match) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            if (visibleCount === 0) {
-                emptyNotice.classList.remove('hidden');
-            } else {
-                emptyNotice.classList.add('hidden');
-            }
-        }
-
-        // MODÁL ČLENA TÝMU (5 ČLENŮ)
-        function openTeamModal(index) {
-            const member = TEAM_MEMBERS[index];
-            if (!member) return;
-
-            document.getElementById('team-modal-name').textContent = member.name;
-            document.getElementById('team-modal-role').textContent = member.role;
-            document.getElementById('team-modal-tag').textContent = member.tag;
-            document.getElementById('team-modal-img').src = member.image;
-            document.getElementById('team-modal-bio').textContent = member.bio;
-            document.getElementById('team-modal-funfact').textContent = member.funfact;
-
-            openModal('team-modal');
-        }
-
-        // MODÁLNÍ SPRÁVCE
-        function openModal(id) {
-            const m = document.getElementById(id);
-            if (m) m.classList.remove('hidden');
-        }
-        function closeModal(id) {
-            const m = document.getElementById(id);
-            if (m) m.classList.add('hidden');
-        }
-
-        // TOAST OZNÁMENÍ
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            const tm = document.getElementById('toast-message');
-            tm.textContent = msg;
-            t.classList.remove('opacity-0', 'translate-y-28');
-            setTimeout(() => {
-                t.classList.add('opacity-0', 'translate-y-28');
-            }, 3800);
-        }
-
-        // ODESLÁNÍ VZORKU ZDARMA
-        function handleSampleOrder(e) {
-            e.preventDefault();
-            closeModal('sample-modal');
-            showToast("Díky! Váš vzorek Energy Gums jsme zařadili k expedici.");
-            e.target.reset();
-        }
-
-        // KONTAKTNÍ FORMULÁŘ
-        function handleContactForm(e) {
-            e.preventDefault();
-            showToast("Děkujeme! Zpráva dorazila přímo našemu pětičlennému týmu.");
-            e.target.reset();
-        }
-
-        // NEWSLETTER
-        function handleNewsletterSubmit(e) {
-            e.preventDefault();
-            showToast("Byl jste zařazen na VIP list k první šarži!");
-            e.target.reset();
-        }
-
-        // POMOCNÁ OCHRANA PROTI XSS V KOMENTÁŘÍCH
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
-        // MOBILNÍ MENU TOGGLE
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        function toggleMobileMenu() {
-            mobileMenu.classList.toggle('hidden');
-        }
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-
-        // DARK / LIGHT MODE LOGIKA
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        themeToggle.addEventListener('click', () => {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-moon text-base';
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-sun text-base';
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-
-        // KONTROLA PREFEROVANÉHO MOTIVU PŘI SPOŠTĚNÍ
-        (function checkTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'light') {
-                document.documentElement.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-moon text-base';
-            } else {
-                document.documentElement.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-sun text-base';
-            }
-        })();
-    </script>
+    window.addEventListener('DOMContentLoaded', () => {
+      document.documentElement.classList.add('dark');
+      renderBlog();
+      checkCookieConsent();
+    });
+  </script>
 </body>
 </html>
